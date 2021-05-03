@@ -20,7 +20,7 @@
 # (there's 6 different ways of choosing the two co-ordinates).
 
 
-from math import floor, ceil, sqrt, round
+from math import floor, ceil, sqrt
 
 # Aka outer_radius, this is the side length of the hex
 edge_length = 1

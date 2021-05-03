@@ -18,7 +18,7 @@
 
 # To find the neighbous of a down triangle, add 1 to a co-ordinate, and subtract one for up neighbours.
 
-
+from math import floor, ceil, sqrt
 
 # This is the side length of the triangle
 edge_length = 1
