@@ -1,5 +1,5 @@
 # Flat-topped cube-cordinate hexes
-# See https://www.redblobgames.com/grids/hexagons/ for an explnation of how this works.
+# See https://www.redblobgames.com/grids/hexagons/ for an extended explnation of how this works.
 # This module provides sample code for working with regular hexagons flat-topped configuration, i.e.
 
 #            ___
@@ -20,6 +20,7 @@
 # (there's 6 different ways of choosing the two co-ordinates).
 
 
+from __future__ import division
 from math import floor, ceil, sqrt
 
 # Aka outer_radius, this is the side length of the hex
@@ -81,9 +82,84 @@ def hex_neighbours(x, y, z):
         [x + 1, y - 1, z    ],
     ]
 
+def hex_dist(x1, y1, z1, x2, y2, z2):
+    """Returns how many steps one hex is from another"""
+    return (abs(x1 - x2) + abs(y1 - y2) + abs(z1 - z2)) / 2
+
 def hex_disc(x, y, z, r):
     """Returns the hexes that are at most distance r from the given hex"""
-    for dx in range(-r, r - 1):
+    for dx in range(-r, r + 1):
         for dy in range(max(-r, -x - r), min(r, -x + r) + 1):
             dz = -dx - dy
             yield [x + dx, y + dy, z + dz]
+
+def hex_line(x1, y1, z1, x2, y2, z2):
+    """Returns the hexes touched by a line running directly from one hex to another"""
+    # TODO: redblobgames claims this is buggy. Implement more robustly?
+    n = hex_dist(x1, y1, z1, x2, y2, z2)
+    c1 = hex_center(x1, y1, z1)
+    c2 = hex_center(x2, y2, z2)
+    for i in range(0, n + 1):
+        t = i / n
+        px = c1[0] + (c2[0] - c1[0]) * t
+        py = c1[1] + (c2[1] - c1[1]) * t
+        yield pick_hex(px, py)
+
+def hex_rect(rect_x, rect_y, rect_z, width, height, inc_bottom=False, inc_top=False):
+    """Returns the hexes in a rectangle that includes the given hex in the bottom left, 
+    that extends `height` hexes upwards, and `width` hexes to the right.
+    inc_bottom and inc_top increase the size of the rect in every other column"""
+    odd_height = int(inc_bottom) + int(inc_top) - 1
+    (x, y, z) = (rect_x, rect_y, rect_z)
+    for dx in range(width):
+        # yield a vertical column
+        for dy in range(height + (dx % 2) * odd_height):
+            yield (x, y + dy, z - dy)
+        # Move one column along, staying at the bottom of the rect
+        x += 1
+        if dx % 2 == int(inc_bottom):
+            z -= 1
+        else:
+            y -= 1
+
+def hex_rect_index(x, y, z, rect_x, rect_y, rect_z, width, height, inc_bottom=False, inc_top=False):
+    """Given a hex and a rectangle, gives a linear position of the hex.
+    The index is an integer between zero and hex_rect_size - 1.
+    This is useful for array storage of rectangles.
+    Returns None if the hex is not in the rectangle.
+    Equivalent to list(hex_rect(...)).index((x, y, z))"""
+    dx = x - rect_x
+    if dx < 0 or dx >= width:
+        return None
+    odd_height = int(inc_bottom) + int(inc_top) - 1
+    # Number of hexes in rect with x value smaller than searched hex.
+    left_count = height * dx + odd_height * (dx // 2)
+    # y value of hex at bottom of the column that the searched hex is in
+    base_dy = rect_y - (dx // 2) - (dx % 2) * int(inc_bottom)
+    dy = y - base_dy
+    if dy < 0 or dy >= height + (dx % 2) * odd_height:
+        return None
+    return left_count + dy
+
+def hex_rect_deindex(index, rect_x, rect_y, rect_z, width, height, inc_bottom=False, inc_top=False):
+    """Performs the inverse of hex_rect_index
+    Equivalent to list(hex_rect(...))[index]"""
+    odd_height = int(inc_bottom) + int(inc_top) - 1
+    two_col = height + height + odd_height
+    dx = 2 * (index // two_col)
+    index -= dx // 2 * two_col
+    if index >= height:
+        dx += 1
+        index -= height
+    if dx < 0 or dx >= width:
+        raise Exception("Hex is not inside rectangle")
+    dy = index
+    # y + oy is the value of hex at bottom of the column that the searched hex is in
+    oy = - (dx // 2) - (dx % 2) * int(inc_bottom)
+    return (rect_x + dx, rect_y + oy + dy, rect_z - dx - oy - dy)
+
+def hex_rect_size(rect_x, rect_y, rect_z, width, height, inc_bottom=False, inc_top=False):
+    """Returns the number of hexes in a given rectangle.
+    Equivalent to len(list(hex_rect(...)))"""
+    odd_height = int(inc_bottom) + int(inc_top) - 1
+    return height * width + odd_height * (width // 2)
