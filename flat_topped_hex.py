@@ -80,3 +80,10 @@ def hex_neighbours(x, y, z):
         [x    , y - 1, z + 1],
         [x + 1, y - 1, z    ],
     ]
+
+def hex_disc(x, y, z, r):
+    """Returns the hexes that are at most distance r from the given hex"""
+    for dx in range(-r, r - 1):
+        for dy in range(max(-r, -x - r), min(r, -x + r) + 1):
+            dz = -dx - dy
+            yield [x + dx, y + dy, z + dz]

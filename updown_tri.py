@@ -68,7 +68,7 @@ def pick_tri(x, y):
         ceil((-1 * x - sqrt3 / 3 * y) / edge_length),
     ]
 
-def hex_neighbours(x, y, z):
+def tri_neighbours(x, y, z):
     """Returns the tris that share an edge with the given tri"""
     if points_up(x, y, z):
         return [
