@@ -98,3 +98,51 @@ def tri_disc(x, y, z, r):
             dz += 1
             if abs(dx) + abs(dy) + abs(dz) <= r:
                 yield (x + dx, y + dy, z + dz)
+
+def tri_line(x1, y1, x2, y2):
+    """Returns the triangles that intersect the line specified"""
+    x1 /= edge_length
+    y1 /= edge_length
+    x2 /= edge_length
+    y2 /= edge_length
+    dx = x2 - x1
+    dy = y2 - y1
+    # Convert from cartesian co-ordinates to the three triangle axes
+    fa =  1 * x1 - sqrt3 / 3 * y1
+    fb =       sqrt3 * 2 / 3 * y1
+    fc = -1 * x1 - sqrt3 / 3 * y1
+    da =  1 * dx - sqrt3 / 3 * dy
+    db =       sqrt3 * 2 / 3 * dy
+    dc = -1 * dx - sqrt3 / 3 * dy
+    # Now do raycasting on a 3d cube grid, except we ensure
+    # we step across cells in an order that alternates
+    # up/down triangles
+    a =  ceil(fa)
+    b =  floor(fb) + 1
+    c =  ceil(fc)
+    isup = a + b + c == 2
+    stepa = 1 if da > 0 else -1
+    stepb = 1 if db > 0 else -1
+    stepc = 1 if dc > 0 else -1
+    ta = (a - int(da < 0) - fa) / da
+    tb = (b - int(db < 0) - fb) / db
+    tc = (c - int(dc < 0) - fc) / dc
+    ida = abs(1 / da)
+    idb = abs(1 / db)
+    idc = abs(1 / dc)
+    yield (a, b, c)
+    while True:
+        if ta <= tb and ta <= tc and (stepa == 1) != isup:
+            if ta > 1: return
+            a += stepa
+            ta += ida
+        elif tb <= ta and tb <= tc and (stepb == 1) != isup:
+            if tb > 1: return
+            b += stepb
+            tb += idb
+        else:
+            if tc > 1: return
+            c += stepc
+            tc += idc
+        yield (a, b, c)
+        isup = not isup
