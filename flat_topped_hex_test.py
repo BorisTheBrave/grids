@@ -47,6 +47,19 @@ class TestFlatToppedHex(unittest.TestCase):
 
         self.assertEqual(len(list(hex_rect(*rect))), hex_rect_size(*rect))
 
+    def test_hex_line_intersect(self):
+        x1, y1 = hex_center(0, 0, 0)
+        x2, y2 = hex_center(4, -3, -1)
+        self.assertListEqual(list(hex_line_intersect(x1, y1, x2, y2)), [
+            (0, 0, 0),
+            (1, -1, 0),
+            (2, -1, -1),
+            (2, -2, 0),
+            (3, -2, -1),
+            (4, -3, -1)
+        ])
+
+
     def test_hex_line(self):
         self.assertListEqual(list(hex_line(0, 0, 0, 4, -3, -1)), [
             (0, 0, 0),

@@ -22,19 +22,12 @@
 
 from __future__ import division
 from math import floor, ceil, sqrt
+from updown_tri import pick_tri, tri_line
 
 # Aka outer_radius, this is the side length of the hex
 edge_length = 1
 
 sqrt3 = sqrt(3)
-
-# See updown_tri.py for a commented explanation of this function
-def pick_tri(x, y):
-    return (
-        ceil(( 1 * x - sqrt3 / 3 * y) / edge_length),
-        floor((    sqrt3 * 2 / 3 * y) / edge_length) + 1,
-        ceil((-1 * x - sqrt3 / 3 * y) / edge_length),
-    )
 
 def hex_center(x, y, z):
     """Returns the center of a given hex in cartesian co-ordinates"""
@@ -109,6 +102,15 @@ def hex_disc(x, y, z, r):
         for dy in range(max(-r, -dx - r), min(r, -dx + r) + 1):
             dz = -dx - dy
             yield (x + dx, y + dy, z + dz)
+
+def hex_line_intersect(x1, y1, x2, y2):
+    """Returns hexes that intersect the line specified"""
+    prev = None
+    for (a, b, c) in tri_line(x1, y1, x2, y2):
+        hex = tri_to_hex(a, b, c)
+        if hex != prev:
+            yield hex
+            prev = hex
 
 def hex_line(x1, y1, z1, x2, y2, z2):
     """Returns the hexes in a shortest path from one hex to another, staying as close to the straight line as possible"""

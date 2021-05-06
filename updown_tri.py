@@ -99,7 +99,7 @@ def tri_disc(x, y, z, r):
             if abs(dx) + abs(dy) + abs(dz) <= r:
                 yield (x + dx, y + dy, z + dz)
 
-def tri_line(x1, y1, x2, y2):
+def tri_line_intersect(x1, y1, x2, y2):
     """Returns the triangles that intersect the line specified"""
     x1 /= edge_length
     y1 /= edge_length
