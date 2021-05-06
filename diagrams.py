@@ -1,4 +1,6 @@
 # This module produces svg diagrams, to assist with testing
+# There's no interesting code here
+
 from flat_topped_hex import *
 from updown_tri import *
 import updown_tri
