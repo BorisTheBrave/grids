@@ -122,9 +122,9 @@ def tri_line_intersect(x1, y1, x2, y2):
     stepa = 1 if da > 0 else -1
     stepb = 1 if db > 0 else -1
     stepc = 1 if dc > 0 else -1
-    ta = (a - int(da < 0) - fa) / da
-    tb = (b - int(db < 0) - fb) / db
-    tc = (c - int(dc < 0) - fc) / dc
+    ta = (a - int(da <= 0) - fa) / da
+    tb = (b - int(db <= 0) - fb) / db
+    tc = (c - int(dc <= 0) - fc) / dc
     ida = abs(1 / da)
     idb = abs(1 / db)
     idc = abs(1 / dc)
