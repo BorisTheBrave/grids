@@ -16,12 +16,10 @@
 # Thus, the origin is a vertex, and it has 6 triangles around it:
 # (1, 0, 0), (1, 1, 0), (0, 1, 0), (0, 1, 1), (0, 0, 1), (1, 0, 1)
 
-# To find the neighbous of a down triangle, add 1 to a co-ordinate, and subtract one for up neighbours.
+# To find the neighbours of a down triangle, add 1 to a co-ordinate, and subtract one for neighbours of an up triangle.
 
 from math import floor, ceil, sqrt
-
-# This is the side length of the triangle
-edge_length = 1
+from settings import edge_length
 
 sqrt3 = sqrt(3)
 

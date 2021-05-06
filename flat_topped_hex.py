@@ -22,10 +22,8 @@
 
 from __future__ import division
 from math import floor, ceil, sqrt
+from settings import edge_length
 from updown_tri import pick_tri, tri_line
-
-# Aka outer_radius, this is the side length of the hex
-edge_length = 1
 
 sqrt3 = sqrt(3)
 
