@@ -31,11 +31,11 @@ sqrt3 = sqrt(3)
 # See updown_tri.py for a commented explanation of this function
 # These triangles pack 6 into a hexagon, so are useful for pick_hex
 def pick_tri(x, y):
-    return [
+    return (
         ceil(( 1 * x - sqrt3 / 3 * y) / edge_length),
         floor((    sqrt3 * 2 / 3 * y) / edge_length) + 1,
         ceil((-1 * x - sqrt3 / 3 * y) / edge_length),
-    ]
+    )
 
 def hex_center(x, y, z):
     """Returns the center of a given hex in cartesian co-ordinates"""
@@ -45,8 +45,8 @@ def hex_center(x, y, z):
     # NB: This function has the nice property that if you pass in x,y,z values that
     # sum to 1 or -1 (not a valid hex), it'll return co-ordinates for the vertices of the
     # hexes.
-    return [(1 * x      - 0.5 * y       - 0.5 * z) * edge_length,
-            (       sqrt3 / 2 * y - sqrt3 / 2 * z) * edge_length]
+    return ((1 * x      - 0.5 * y       - 0.5 * z) * edge_length,
+            (       sqrt3 / 2 * y - sqrt3 / 2 * z) * edge_length)
 
 def hex_corners(x, y, z):
     """Returns the six corners of a given hex in cartesian co-ordinates"""
@@ -65,37 +65,37 @@ def pick_hex(x, y):
     (a, b, c) = pick_tri(x, y)
     # Rotate the co-ordinate system by 30 degrees, and discretize.
     # I'm not totally sure why this works.
-    return [
+    return (
         round((a - c) / 3),
         round((b - a) / 3),
         round((c - b) / 3),
-    ]
+    )
 
 def hex_neighbours(x, y, z):
     """Returns the hexes that share an edge with the given hex"""
     return [
-        [x + 1, y    , z - 1],
-        [x    , y + 1, z - 1],
-        [x - 1, y + 1, z    ],
-        [x - 1, y    , z + 1],
-        [x    , y - 1, z + 1],
-        [x + 1, y - 1, z    ],
+        (x + 1, y    , z - 1),
+        (x    , y + 1, z - 1),
+        (x - 1, y + 1, z    ),
+        (x - 1, y    , z + 1),
+        (x    , y - 1, z + 1),
+        (x + 1, y - 1, z    ),
     ]
 
 def hex_dist(x1, y1, z1, x2, y2, z2):
     """Returns how many steps one hex is from another"""
-    return (abs(x1 - x2) + abs(y1 - y2) + abs(z1 - z2)) / 2
+    return (abs(x1 - x2) + abs(y1 - y2) + abs(z1 - z2)) // 2
 
 def hex_disc(x, y, z, r):
     """Returns the hexes that are at most distance r from the given hex"""
     for dx in range(-r, r + 1):
-        for dy in range(max(-r, -x - r), min(r, -x + r) + 1):
+        for dy in range(max(-r, -dx - r), min(r, -dx + r) + 1):
             dz = -dx - dy
-            yield [x + dx, y + dy, z + dz]
+            yield (x + dx, y + dy, z + dz)
 
 def hex_line(x1, y1, z1, x2, y2, z2):
-    """Returns the hexes touched by a line running directly from one hex to another"""
-    # TODO: redblobgames claims this is buggy. Implement more robustly?
+    """Returns the hexes in a shortest path from one hex to another, staying as close to the straight line as possible"""
+    # Note that drawing a straight line from one hex to another can touch hexes not returned by this method.
     n = hex_dist(x1, y1, z1, x2, y2, z2)
     c1 = hex_center(x1, y1, z1)
     c2 = hex_center(x2, y2, z2)
