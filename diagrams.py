@@ -52,13 +52,10 @@ def tri_grid_svg():
     svg = ""
     svg += """<svg viewBox="-10 -10 20 20" xmlns="http://www.w3.org/2000/svg">\n"""
     svg += """<rect x="-10" y="-10" width="20" height="20" style="fill: none; stroke: blue"/>\n"""
-    for x in range(-5, 5):
-        for y in range(-5, 5):
-            for t in range(2):
-                z = 2 - t - x - y
-                center = flip(tri_center(x, y, z))
-                svg += poly(tri_corners(x, y, z))
-                svg += cell_text(center, x, y, z)
+    for x, y, z in tri_disc(0, 1, 0, 4):
+        center = flip(tri_center(x, y, z))
+        svg += poly(tri_corners(x, y, z))
+        svg += cell_text(center, x, y, z)
     svg += "</svg>"
 
     with open("svg/tri_grid.svg", "w") as f:

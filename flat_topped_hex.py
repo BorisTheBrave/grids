@@ -29,7 +29,6 @@ edge_length = 1
 sqrt3 = sqrt(3)
 
 # See updown_tri.py for a commented explanation of this function
-# These triangles pack 6 into a hexagon, so are useful for pick_hex
 def pick_tri(x, y):
     return (
         ceil(( 1 * x - sqrt3 / 3 * y) / edge_length),

@@ -82,3 +82,19 @@ def tri_neighbours(x, y, z):
             (x    , y + 1, z    ),
             (x    , y    , z + 1),
         ]
+
+def tri_dist(x1, y1, z1, x2, y2, z2):
+    """Returns how many steps one tri is from another"""
+    return abs(x1 - x2) + abs(y1 - y2) + abs(z1 - z2)
+
+def tri_disc(x, y, z, r):
+    """Returns the tris that are at most distance r from the given tris"""
+    # This could probably be optimized more
+    for dx in range(-r, r + 1):
+        for dy in range(-r, r + 1):
+            dz = 1 - (x + y + z + dx + dy)
+            if abs(dx) + abs(dy) + abs(dz) <= r:
+                yield (x + dx, y + dy, z + dz)
+            dz += 1
+            if abs(dx) + abs(dy) + abs(dz) <= r:
+                yield (x + dx, y + dy, z + dz)
