@@ -59,17 +59,35 @@ def hex_corners(x, y, z):
         hex_center(x + 1, y    , z    ),
     ]
 
-def pick_hex(x, y):
-    """Returns the hex that contains a given cartesian co-ordinate point"""
-    # Find the triangle that the point is in
-    (a, b, c) = pick_tri(x, y)
+def tri_to_hex(x, y, z):
+    """Given a triangle co-ordinate as specified in updown_tri, finds the hex that contains it"""
     # Rotate the co-ordinate system by 30 degrees, and discretize.
     # I'm not totally sure why this works.
     return (
-        round((a - c) / 3),
-        round((b - a) / 3),
-        round((c - b) / 3),
+        round((x - z) / 3),
+        round((y - x) / 3),
+        round((z - y) / 3),
     )
+
+def hex_to_tris(x, y, z):
+    """Given a hex, returns the co-ordinates of the 6 triangles it contains, using co-ordinates as described in updown_tri"""
+    a = x - y
+    b = y - z
+    c = z - x
+    return [
+        (a + 1, b    , c    ),
+        (a + 1, b + 1, c    ),
+        (a    , b + 1, c    ),
+        (a    , b + 1, c + 1),
+        (a    , b    , c + 1),
+        (a + 1, b    , c + 1),
+    ]
+
+def pick_hex(x, y):
+    """Returns the hex that contains a given cartesian co-ordinate point"""
+    (a, b, c) = pick_tri(x, y)
+    return tri_to_hex(a, b, c)
+    
 
 def hex_neighbours(x, y, z):
     """Returns the hexes that share an edge with the given hex"""

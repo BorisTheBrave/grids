@@ -56,5 +56,17 @@ class TestFlatToppedHex(unittest.TestCase):
             (4, -3, -1)
         ])
 
+    def test_hex_to_tris(self):
+        self.assertListEqual(hex_to_tris(1, 0, -1), [
+            (2, 1, -2),
+            (2, 2, -2),
+            (1, 2, -2),
+            (1, 2, -1),
+            (1, 1, -1),
+            (2, 1, -1),
+        ])
+        for tri in hex_to_tris(1, 0, -1):
+            self.assertEqual(tri_to_hex(*tri), (1, 0, -1))
+
 if __name__ == '__main__':
     unittest.main()
