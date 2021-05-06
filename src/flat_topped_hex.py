@@ -104,7 +104,7 @@ def hex_disc(x, y, z, r):
 def hex_line_intersect(x1, y1, x2, y2):
     """Returns hexes that intersect the line specified in cartesian co-ordinates"""
     prev = None
-    for (a, b, c) in tri_line(x1, y1, x2, y2):
+    for (a, b, c) in tri_line_intersect(x1, y1, x2, y2):
         hex = tri_to_hex(a, b, c)
         if hex != prev:
             yield hex
