@@ -1,7 +1,7 @@
 # This module produces svg diagrams, to assist with testing
 # There's no interesting code here
 
-from ..flat_topped_hex import *
+from flat_topped_hex import *
 from updown_tri import *
 import updown_tri
 
@@ -29,7 +29,7 @@ def hex_grid_svg():
         svg += cell_text(center, x, y, z)
     svg += "</svg>"
 
-    with open("../svg/hex_grid.svg", "w") as f:
+    with open("svg/hex_grid.svg", "w") as f:
         f.write(svg)
 
 def hex_neighbours_svg():
@@ -46,7 +46,7 @@ def hex_neighbours_svg():
         svg += cell_text([center[0] * 0.85, center[1] * 0.7], pm(x), pm(y), pm(z))
     svg += "</svg>"
 
-    with open("../svg/hex_neighbours.svg", "w") as f:
+    with open("svg/hex_neighbours.svg", "w") as f:
         f.write(svg)
 
 def tri_grid_svg():
@@ -60,7 +60,7 @@ def tri_grid_svg():
         svg += cell_text(center, x, y, z)
     svg += "</svg>"
 
-    with open("../svg/tri_grid.svg", "w") as f:
+    with open("svg/tri_grid.svg", "w") as f:
         f.write(svg)
 
 def tri_neighbours_svg():
@@ -80,7 +80,7 @@ def tri_neighbours_svg():
 
     svg += "</svg>"
 
-    with open("../svg/tri_neighbours.svg", "w") as f:
+    with open("svg/tri_neighbours.svg", "w") as f:
         f.write(svg)
 
 hex_grid_svg()

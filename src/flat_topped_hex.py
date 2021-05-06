@@ -23,7 +23,7 @@
 from __future__ import division
 from math import floor, ceil, sqrt
 from settings import edge_length
-from updown_tri import pick_tri, tri_line
+from updown_tri import pick_tri, tri_line_intersect
 
 sqrt3 = sqrt(3)
 
@@ -102,7 +102,7 @@ def hex_disc(x, y, z, r):
             yield (x + dx, y + dy, z + dz)
 
 def hex_line_intersect(x1, y1, x2, y2):
-    """Returns hexes that intersect the line specified"""
+    """Returns hexes that intersect the line specified in cartesian co-ordinates"""
     prev = None
     for (a, b, c) in tri_line(x1, y1, x2, y2):
         hex = tri_to_hex(a, b, c)

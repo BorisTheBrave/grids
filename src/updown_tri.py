@@ -98,7 +98,7 @@ def tri_disc(x, y, z, r):
                 yield (x + dx, y + dy, z + dz)
 
 def tri_line_intersect(x1, y1, x2, y2):
-    """Returns the triangles that intersect the line specified"""
+    """Returns the triangles that intersect the line specified in cartesian co-ordinates"""
     x1 /= edge_length
     y1 /= edge_length
     x2 /= edge_length
