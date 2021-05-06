@@ -34,8 +34,8 @@ def tri_center(x, y, z):
     # NB: This function has the nice property that if you pass in x,y,z values that
     # sum to zero (not a valid triangle), it'll return co-ordinates for the vertices of the
     # triangles.
-    return [(       0.5 * x +                      -0.5 * z) * edge_length,
-            (-sqrt3 / 6 * x + sqrt3 / 3 * y - sqrt3 / 6 * z) * edge_length]
+    return ((       0.5 * x +                      -0.5 * z) * edge_length,
+            (-sqrt3 / 6 * x + sqrt3 / 3 * y - sqrt3 / 6 * z) * edge_length)
 
 def points_up(x, y, z):
     """Returns True if this is an upwards pointing triangle, otherwise False"""
@@ -62,23 +62,23 @@ def pick_tri(x, y):
     # Or equivalently, multiply by the inverse matrix to tri_center
     # Note we have to break symmetry, using floor(...)+1 instead of ceil, in order
     # to deal with corner vertices like (0, 0) correctly.
-    return [
+    return (
         ceil(( 1 * x - sqrt3 / 3 * y) / edge_length),
         floor((    sqrt3 * 2 / 3 * y) / edge_length) + 1,
         ceil((-1 * x - sqrt3 / 3 * y) / edge_length),
-    ]
+    )
 
 def tri_neighbours(x, y, z):
     """Returns the tris that share an edge with the given tri"""
     if points_up(x, y, z):
         return [
-            [x - 1, y    , z    ],
-            [x    , y - 1, z    ],
-            [x    , y    , z - 1],
+            (x - 1, y    , z    ),
+            (x    , y - 1, z    ),
+            (x    , y    , z - 1),
         ]
     else:
         return [
-            [x + 1, y    , z    ],
-            [x    , y + 1, z    ],
-            [x    , y    , z + 1],
+            (x + 1, y    , z    ),
+            (x    , y + 1, z    ),
+            (x    , y    , z + 1),
         ]
