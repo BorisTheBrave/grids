@@ -86,7 +86,7 @@ def tri_dist(x1, y1, z1, x2, y2, z2):
     return abs(x1 - x2) + abs(y1 - y2) + abs(z1 - z2)
 
 def tri_disc(x, y, z, r):
-    """Returns the tris that are at most distance r from the given tris"""
+    """Returns the tris that are at most distance r from the given tri"""
     # This could probably be optimized more
     for dx in range(-r, r + 1):
         for dy in range(-r, r + 1):
