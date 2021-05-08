@@ -144,3 +144,34 @@ def tri_line_intersect(x1, y1, x2, y2):
             tc += idc
         yield (a, b, c)
         isup = not isup
+
+def tri_rect_intersect(x, y, width, height):
+    """Returns the tris that intersect the rectangle specified in cartesian co-ordinates"""
+    x /= edge_length
+    y /= edge_length
+    width /= edge_length
+    height /= edge_length
+    # Lower and upper bound by row
+    fl = sqrt3 * 2 / 3 * y
+    fu = sqrt3 * 2 / 3 * (y + height)
+    # Loop over all rows that the rectangle is in
+    for b in range(ceil(fl), ceil(fu) + 1):
+        # Consider each row vs a trimmed rect
+        minb = max(b - 1, fl)
+        maxb = min(b, fu)
+        # The smallest / largest values for the diagonals
+        # can be read from the trimmed rect corners
+        mina = ceil(x - maxb / 2)
+        maxa = ceil(x + width - minb / 2)
+        minc = ceil(-x - width - maxb / 2)
+        maxc = ceil(-x - minb / 2)
+        # Walk along the row left to right
+        a = mina
+        c = maxc
+        assert a + b + c == 1 or a + b + c == 2
+        while a <= maxa and c >= minc:
+            yield (a, b, c)
+            if a + b + c == 1:
+                a += 1
+            else:
+                c -= 1

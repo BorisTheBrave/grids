@@ -32,5 +32,23 @@ class TestUpDownTri(unittest.TestCase):
             (2, 0, -1)
         ])
 
+    def test_rect_intersect(self):
+        x1, y1 = tri_center(0, 1, 0)
+        self.assertListEqual(list(tri_rect_intersect(x1, y1, 0, 0)), [
+            (0, 1, 0)
+        ])
+        self.assertListEqual(list(tri_rect_intersect(x1, y1, 0, 0.3)), [
+            (0, 1, 0),
+            (0, 2, 0),
+        ])
+        self.assertListEqual(list(tri_rect_intersect(x1, y1, 0.6, 0.3)), [
+            (0, 1, 0),
+            (1, 1, 0),
+            (1, 1, -1),
+            (0, 2, 0),
+            (0, 2, -1),
+            (1, 2, -1),
+        ])
+
 if __name__ == '__main__':
     unittest.main()

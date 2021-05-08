@@ -23,7 +23,7 @@
 from __future__ import division
 from math import floor, ceil, sqrt
 from settings import edge_length
-from updown_tri import pick_tri, tri_line_intersect
+from updown_tri import pick_tri, tri_line_intersect, tri_rect_intersect
 
 sqrt3 = sqrt(3)
 
@@ -121,6 +121,20 @@ def hex_line(x1, y1, z1, x2, y2, z2):
         px = c1[0] + (c2[0] - c1[0]) * t
         py = c1[1] + (c2[1] - c1[1]) * t
         yield pick_hex(px, py)
+
+def hex_rect_intersect(x, y, width, height):
+    """Returns the hexes that intersect the rectangle specified in cartesian co-ordinates"""
+    prev = None
+    first_b = None
+    for (a, b, c) in tri_rect_intersect(x, y, width, height):
+        if first_b is None: first_b = b
+        hex = tri_to_hex(a, b, c)
+        # Tri must be in the bottom half of the hex, except the first row
+        # This stops double counting
+        if first_b == b or hex[1] - hex[2] == b:
+            if hex != prev:
+                yield hex
+                prev = hex
 
 def hex_rect(rect_x, rect_y, rect_z, width, height, inc_bottom=False, inc_top=False):
     """Returns the hexes in a rectangle that includes the given hex in the bottom left, 

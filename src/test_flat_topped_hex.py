@@ -1,4 +1,5 @@
 from flat_topped_hex import *
+from updown_tri import tri_center
 import unittest
 
 class TestFlatToppedHex(unittest.TestCase):
@@ -80,6 +81,14 @@ class TestFlatToppedHex(unittest.TestCase):
         ])
         for tri in hex_to_tris(1, 0, -1):
             self.assertEqual(tri_to_hex(*tri), (1, 0, -1))
+
+    def test_rect_intersect(self):
+        x1, y1 = tri_center(0, 1, 0)
+        self.assertListEqual(list(hex_rect_intersect(x1, y1, 0.6, 0.3)), [
+            (0, 0, 0),
+            (1, 0, -1),
+            (0, 1, -1),
+        ])
 
 if __name__ == '__main__':
     unittest.main()
