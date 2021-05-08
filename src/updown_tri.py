@@ -147,6 +147,9 @@ def tri_line_intersect(x1, y1, x2, y2):
 
 def tri_rect_intersect(x, y, width, height):
     """Returns the tris that intersect the rectangle specified in cartesian co-ordinates"""
+    assert width >= 0, "Rectangle should have non-negative width"
+    assert height >= 0, "Rectangle should have non-negative height"
+    # For consistency, we treat the triangles as exclusive of their border, and the rect as inclusive
     x /= edge_length
     y /= edge_length
     width /= edge_length
@@ -155,15 +158,15 @@ def tri_rect_intersect(x, y, width, height):
     fl = sqrt3 * 2 / 3 * y
     fu = sqrt3 * 2 / 3 * (y + height)
     # Loop over all rows that the rectangle is in
-    for b in range(ceil(fl), ceil(fu) + 1):
+    for b in range(floor(fl) + 1, ceil(fu) + 1):
         # Consider each row vs a trimmed rect
         minb = max(b - 1, fl)
         maxb = min(b, fu)
         # The smallest / largest values for the diagonals
         # can be read from the trimmed rect corners
-        mina = ceil(x - maxb / 2)
+        mina = floor(x - maxb / 2) + 1
         maxa = ceil(x + width - minb / 2)
-        minc = ceil(-x - width - maxb / 2)
+        minc = floor(-x - width - maxb / 2) + 1
         maxc = ceil(-x - minb / 2)
         # Walk along the row left to right
         a = mina
