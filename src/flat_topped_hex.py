@@ -27,6 +27,8 @@ from updown_tri import pick_tri, tri_line_intersect, tri_rect_intersect
 
 sqrt3 = sqrt(3)
 
+# Basics #######################################################################
+
 def hex_center(x, y, z):
     """Returns the center of a given hex in cartesian co-ordinates"""
     # Each unit of x, y, z moves you in the direction of one of the corners of
@@ -93,6 +95,49 @@ def hex_neighbours(x, y, z):
 def hex_dist(x1, y1, z1, x2, y2, z2):
     """Returns how many steps one hex is from another"""
     return (abs(x1 - x2) + abs(y1 - y2) + abs(z1 - z2)) // 2
+
+# Symmetry #####################################################################
+
+def hex_rotate_60(x, y, z, n = 1):
+    """Rotates the given hex n * 60 degrees counter clockwise around the origin,
+    and returns the co-ordinates of the new hex."""
+    n = n % 6 if n >= 0 else n % 6 + 6
+    if n == 0:
+        return (x, y, z)
+    if n == 1:
+        return (-y, -z, -x)
+    if n == 2:
+        return (z, x, y)
+    if n == 3:
+        return (-x, -y, -z)
+    if n == 4:
+        return (y, z, x)
+    if n == 5:
+        return (-z, -x, -y)
+
+def hex_rotate_about_60(x, y, z, about_x, about_y, about_z, n = 1):
+    """Rotates the given hex n* 60 degress counter clockwise about the given hex
+    and return the co-ordinates of the new hex."""
+    (a, b, c) = tri_rotate_60(x - about_x, y - about_y, z - about_z)
+    return (a + about_x, y + about_y, z + about_z)
+
+def hex_reflect_y(x, y, z):
+    """Reflects the given hex through the x-axis
+    and returns the co-ordinates of the new hex"""
+    return (x, z, y)
+
+def hex_reflect_x(x, y, z):
+    """Reflects the given triangle through the y-axis
+    and returns the co-ordinates of the new triangle"""
+    return (-x, -z, -y)
+
+def hex_reflect_by(x, y, z, n = 0):
+    """Reflects the given hex through the x-axis rotated counter clockwise by n * 30 degrees
+    and returns the co-ordinates of the new hex"""
+    (a, b, c) = hex_reflect_y(x, y, z)
+    return hex_rotate_60(a, b, c, n)
+
+# Shapes #######################################################################
 
 def hex_disc(x, y, z, r):
     """Returns the hexes that are at most distance r from the given hex"""

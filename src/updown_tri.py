@@ -23,6 +23,8 @@ from settings import edge_length
 
 sqrt3 = sqrt(3)
 
+# Basics #######################################################################
+
 def tri_center(x, y, z):
     """Returns the center of a given triangle in cartesian co-ordinates"""
     # Each unit of x, y, z moves you in the direction of one of the edges of a
@@ -96,6 +98,49 @@ def tri_disc(x, y, z, r):
             dz += 1
             if abs(dx) + abs(dy) + abs(dz) <= r:
                 yield (x + dx, y + dy, z + dz)
+
+# Symmetry #####################################################################
+
+def tri_rotate_60(x, y, z, n = 1):
+    """Rotates the given triangle n * 60 degrees counter clockwise around the origin,
+    and returns the co-ordinates of the new triangle."""
+    n = n % 6 if n >= 0 else n % 6 + 6
+    if n == 0:
+        return (x, y, z)
+    if n == 1:
+        return (1 - y, 1 - z, 1 - x)
+    if n == 2:
+        return (z, x, y)
+    if n == 3:
+        return (1 - x, 1 - y, 1 - z)
+    if n == 4:
+        return (y, z, x)
+    if n == 5:
+        return (1 - z, 1 - x, 1 - y)
+
+def tri_rotate_about_60(x, y, z, about_x, about_y, about_z, n = 1):
+    """Rotates the given triangle n* 60 degress counter clockwise about the given tri
+    and return the co-ordinates of the new triangle."""
+    (a, b, c) = tri_rotate_60(x - about_x, y - about_y, z - about_z)
+    return (a + about_x, y + about_y, z + about_z)
+
+def tri_reflect_y(x, y, z):
+    """Reflects the given triangle through the x-axis
+    and returns the co-ordinates of the new triangle"""
+    return (1 - z, 1 - y, 1 - x)
+
+def tri_reflect_x(x, y, z):
+    """Reflects the given triangle through the y-axis
+    and returns the co-ordinates of the new triangle"""
+    return (z, y, x)
+
+def tri_reflect_by(x, y, z, n = 0):
+    """Reflects the given triangle through the x-axis rotated counter clockwise by n * 30 degrees
+    and returns the co-ordinates of the new triangle"""
+    (a, b, c) = tri_reflect_y(x, y, z)
+    return tri_rotate_60(a, b, c, n)
+
+# Shapes #######################################################################
 
 def tri_line_intersect(x1, y1, x2, y2):
     """Returns the triangles that intersect the line specified in cartesian co-ordinates"""

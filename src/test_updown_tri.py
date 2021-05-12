@@ -50,5 +50,11 @@ class TestUpDownTri(unittest.TestCase):
             (1, 2, -1),
         ])
 
+    def test_reflect(self):
+        self.assertEqual(tri_reflect_x(1, 1, 0), (0, 1, 1))
+        self.assertEqual(tri_reflect_y(1, 1, 0), (1, 0, 0))
+        self.assertEqual(tri_reflect_by(1, 1, 0, 1), (1, 1, 0))
+        self.assertEqual(tri_reflect_by(1, 1, 0, -1), (1, 0, 1))
+
 if __name__ == '__main__':
     unittest.main()
