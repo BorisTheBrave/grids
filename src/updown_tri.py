@@ -190,6 +190,12 @@ def tri_line_intersect(x1, y1, x2, y2):
         yield (a, b, c)
         isup = not isup
 
+def tri_line(x1, y1, z1, x2, y2, z2):
+    """Returns the tris in a shortest path from one tri to another, staying as close to the straight line as possible"""
+    (x1, y1) = tri_center(x1, y1, z1)
+    (x2, y2) = tri_center(x2, y2, z2)
+    return tri_line_intersect(x1, y1, x2, y2)
+
 def tri_rect_intersect(x, y, width, height):
     """Returns the tris that intersect the rectangle specified in cartesian co-ordinates"""
     assert width >= 0, "Rectangle should have non-negative width"
