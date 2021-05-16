@@ -90,5 +90,22 @@ class TestFlatToppedHex(unittest.TestCase):
             (0, 1, -1),
         ])
 
+    def test_parent(self):
+        def test_parent(x, y, z, px, py, pz):
+            c = (x, y, z)
+            p = (px, py, pz)
+            self.assertEqual(hex_parent(*c), p)
+            self.assertEqual(hex_parent_center_child(*p), c)
+            for n in hex_neighbours(*c):
+                self.assertEqual(hex_parent(*n), p, f"{n} should have parent {p}")
+
+        test_parent(0, 0, 0, 0, 0, 0)
+        test_parent(5, -2, -3, 1, -1, 0)
+        test_parent(3, -5, 2, 0, -1, 1)
+        test_parent(-2, -3, 5, -1, 0, 1)
+        test_parent(10, -4, -6, 2, -2, 0)
+
+
+
 if __name__ == '__main__':
     unittest.main()

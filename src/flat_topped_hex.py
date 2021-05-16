@@ -55,6 +55,7 @@ def tri_to_hex(x, y, z):
     """Given a triangle co-ordinate as specified in updown_tri, finds the hex that contains it"""
     # Rotate the co-ordinate system by 30 degrees, and discretize.
     # I'm not totally sure why this works.
+    # Thanks to https://justinpombrio.net/programming/2020/04/28/pixel-to-hex.html
     return (
         round((x - z) / 3),
         round((y - x) / 3),
@@ -239,3 +240,40 @@ def hex_rect_size(rect_x, rect_y, rect_z, width, height, inc_bottom=False, inc_t
     Equivalent to len(list(hex_rect(...)))"""
     odd_height = int(inc_bottom) + int(inc_top) - 1
     return height * width + odd_height * (width // 2)
+
+# Nesting ## ###################################################################
+ 
+# Based on work in https://observablehq.com/@sanderevers/hexagon-tiling-of-an-hexagonal-grid
+# Groups hexes into larger shapes that is each a disc around a given center hex
+# These parent discs are themselves roughly hexagon shaped and roughly laid out like a pointy topped hexagon grid.
+
+parent_radius = 2
+parent_area = 3 * parent_radius * parent_radius + 3 * parent_radius + 1
+parent_shift = 3 * parent_radius + 2
+
+def hex_parent(x, y, z):
+    """Returns the parent hex containing the given hex."""
+    a = (z + y * parent_shift) // parent_area
+    b = (x + z * parent_shift) // parent_area
+    c = (y + x * parent_shift) // parent_area
+    return (
+        (1 + c - b) // 3,
+        (1 + a - c) // 3,
+        (1 + b - a) // 3,
+    )
+
+def hex_parent_center_child(x, y, z):
+    """Returns the central hex of a given parent hex."""
+    a = y - z
+    b = z - x
+    c = x - y
+    return (
+        (parent_shift * c + b) // 3,
+        (parent_shift * a + c) // 3,
+        (parent_shift * b + a) // 3,
+    )
+
+def hex_parent_children(x, y, z):
+    """Returns all children hex of a given parent hex"""
+    cx, cy, cz = hex_parent_center_child(x, y, z)
+    return hex_disc(cx, cy, cz, parent_radius)
