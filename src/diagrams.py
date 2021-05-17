@@ -3,6 +3,7 @@
 
 from flat_topped_hex import *
 from updown_tri import *
+from square import *
 import updown_tri
 
 poly_style="fill: rgb(244, 244, 241); stroke: rgb(51, 51, 51); stroke-width: 0.1"
@@ -19,10 +20,13 @@ def poly(corners):
     points = " ".join(map(lambda p: ",".join(map(str,flip(p))), corners))
     return f"""<polygon points="{points}" style="{poly_style}" />\n"""
 
-def cell_text(p, x, y, z):
-    text = f"{x}, {y}, {z}"
-
-    return f"""<text x="{p[0]}" y="{p[1]}" text-anchor="middle" alignment-baseline="middle" style="{text_style}"><tspan {xs}>{x}</tspan>, <tspan {ys}>{y}</tspan>, <tspan {zs}>{z}</tspan></text>\n"""
+def cell_text(p, x, y, z=None):
+    text = f"""<text x="{p[0]}" y="{p[1] + 0.08}" text-anchor="middle" alignment-baseline="middle" style="{text_style}">"""
+    text += f"""<tspan {xs}>{x}</tspan>, <tspan {ys}>{y}</tspan>"""
+    if z is not None:
+        text += f""", <tspan {zs}>{z}</tspan>"""
+    text += f"""</text>\n"""
+    return text
 
 def hex_grid_svg():
     svg = ""
@@ -93,7 +97,20 @@ def tri_neighbours_svg():
     with open("svg/tri_neighbours.svg", "w") as f:
         f.write(svg)
 
+def square_grid_svg():
+    svg = ""
+    svg += """<svg viewBox="-10 -10 20 20" xmlns="http://www.w3.org/2000/svg">\n"""
+    for x, y in square_disc(0, 0, 5):
+        center = flip(square_center(x, y))
+        svg += poly(square_corners(x, y))
+        svg += cell_text(center, x, y)
+    svg += "</svg>"
+
+    with open("svg/square_grid.svg", "w") as f:
+        f.write(svg)
+
 hex_grid_svg()
 hex_neighbours_svg()
 tri_grid_svg()
 tri_neighbours_svg()
+square_grid_svg()

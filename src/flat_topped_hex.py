@@ -128,8 +128,8 @@ def hex_reflect_y(x, y, z):
     return (x, z, y)
 
 def hex_reflect_x(x, y, z):
-    """Reflects the given triangle through the y-axis
-    and returns the co-ordinates of the new triangle"""
+    """Reflects the given hex through the y-axis
+    and returns the co-ordinates of the new hex"""
     return (-x, -z, -y)
 
 def hex_reflect_by(x, y, z, n = 0):
