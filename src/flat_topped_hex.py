@@ -200,21 +200,34 @@ def hex_rect(rect_x, rect_y, rect_z, width, height, inc_bottom=False, inc_top=Fa
         else:
             y -= 1
 
+def hex_rect_knoll(x, y, z, rect_x, rect_y, rect_z, width, height, inc_bottom=False, inc_top=False):
+    """Given a hex and a rectangle, gives a pair of integer cartesian co-ordinates that identify the square in the rectangle"""
+    dx = x - rect_x
+    if dx < 0 or dx >= width:
+        return None
+    odd_height = int(inc_bottom) + int(inc_top) - 1
+    # y value of hex at bottom of the column that the searched hex is in
+    base_dy = rect_y - (dx // 2) - (dx % 2) * int(inc_bottom)
+    dy = y - base_dy
+    return (dx, dy)
+
+def hex_rect_unknoll(dx, dy, rect_x, rect_y, rect_z, width, height, inc_bottom=False, inc_top=False):
+    """Given a co-ordinate pair and a rectangle, reverses hex_rect_knoll"""
+    oy = - (dx // 2) - (dx % 2) * int(inc_bottom)
+    return (rect_x + dx, rect_y + oy + dy, rect_z - dx - oy - dy)
+
 def hex_rect_index(x, y, z, rect_x, rect_y, rect_z, width, height, inc_bottom=False, inc_top=False):
     """Given a hex and a rectangle, gives a linear position of the hex.
     The index is an integer between zero and hex_rect_size - 1.
     This is useful for array storage of rectangles.
     Returns None if the hex is not in the rectangle.
     Equivalent to list(hex_rect(...)).index((x, y, z))"""
-    dx = x - rect_x
+    (dx, dy) = hex_rect_knoll(x, y, z, rect_x, rect_y, rect_z, width, height, inc_bottom, inc_top)
     if dx < 0 or dx >= width:
         return None
     odd_height = int(inc_bottom) + int(inc_top) - 1
     # Number of hexes in rect with x value smaller than searched hex.
     left_count = height * dx + odd_height * (dx // 2)
-    # y value of hex at bottom of the column that the searched hex is in
-    base_dy = rect_y - (dx // 2) - (dx % 2) * int(inc_bottom)
-    dy = y - base_dy
     if dy < 0 or dy >= height + (dx % 2) * odd_height:
         return None
     return left_count + dy
@@ -232,9 +245,7 @@ def hex_rect_deindex(index, rect_x, rect_y, rect_z, width, height, inc_bottom=Fa
     if dx < 0 or dx >= width:
         raise Exception("Hex is not inside rectangle")
     dy = index
-    # y + oy is the value of hex at bottom of the column that the searched hex is in
-    oy = - (dx // 2) - (dx % 2) * int(inc_bottom)
-    return (rect_x + dx, rect_y + oy + dy, rect_z - dx - oy - dy)
+    return hex_rect_unknoll(dx, dy, rect_x, rect_y, rect_z, width, height, inc_bottom, inc_top)
 
 def hex_rect_size(rect_x, rect_y, rect_z, width, height, inc_bottom=False, inc_top=False):
     """Returns the number of hexes in a given rectangle.

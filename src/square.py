@@ -150,6 +150,14 @@ def square_rect(rect_x, rect_y, width, height):
         for dy in range(height):
             yield (rect_x + x, rect_y + y)
 
+def square_rect_knoll(x, y, rect_x, rect_y, width, height):
+    """Given a square and a rectangle, gives a pair of co-ordinates that identify the square in the rectangle"""
+    return (x - rect_x, y - rect_y)
+
+def square_rect_unknoll(dx, dy, rect_x, rect_y, width, height):
+    """Given a co-ordinate pair and a rectangle, reverses square_rect_knoll"""
+    return (x + rect_x, y + rect_y)
+
 def square_rect_index(x, y, rect_x, rect_y, width, height):
     """Given a square and a rectangle, gives a linear position of the square.
     The index is an integer between zero and square_rect_size - 1.
