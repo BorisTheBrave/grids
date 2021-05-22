@@ -8,9 +8,9 @@
 #   /  \  /  \  /
 #  /____\/____\/
 
-# Each triangle is defined by three co-ordinates, x, y, z.
-# y determines which row the triangle is in, and x and z the two diagonals.
-# x + y + z always sums to either 1 or 2.
+# Each triangle is defined by three co-ordinates, a, b, c.
+# b determines which row the triangle is in, and a and c the two diagonals.
+# a + b + c always sums to either 1 or 2.
 # There are many other possible co-ordinate schemes, but this one seems to have the simplest maths.
 
 # Thus, the origin is a vertex, and it has 6 triangles around it:
@@ -25,35 +25,35 @@ sqrt3 = sqrt(3)
 
 # Basics #######################################################################
 
-def tri_center(x, y, z):
+def tri_center(a, b, c):
     """Returns the center of a given triangle in cartesian co-ordinates"""
-    # Each unit of x, y, z moves you in the direction of one of the edges of a
+    # Each unit of a, b, c moves you in the direction of one of the edges of a
     # down triangle, in linear combination.
     # Or equivalently, this function multiplies by the inverse matrix to pick_tri
     #
     # NB: This function has the nice property that if you pass in x,y,z values that
     # sum to zero (not a valid triangle), it'll return co-ordinates for the vertices of the
     # triangles.
-    return ((       0.5 * x +                      -0.5 * z) * edge_length,
-            (-sqrt3 / 6 * x + sqrt3 / 3 * y - sqrt3 / 6 * z) * edge_length)
+    return ((       0.5 * a +                      -0.5 * c) * edge_length,
+            (-sqrt3 / 6 * a + sqrt3 / 3 * b - sqrt3 / 6 * c) * edge_length)
 
-def points_up(x, y, z):
+def points_up(a, b, c):
     """Returns True if this is an upwards pointing triangle, otherwise False"""
-    return x + y + z == 2
+    return a + b + c == 2
 
-def tri_corners(x, y, z):
+def tri_corners(a, b, c):
     """Returns the three corners of a given triangle in cartesian co-ordinates"""
-    if points_up(x, y, z):
+    if points_up(a, b, c):
         return [
-            tri_center(1 + x, y, z),
-            tri_center(x, y, 1 + z),
-            tri_center(x, 1 + y, z),
+            tri_center(1 + a, b, c),
+            tri_center(a, b, 1 + c),
+            tri_center(a, 1 + b, c),
         ]
     else:
         return [
-            tri_center(-1 + x, y, z),
-            tri_center(x, y, -1 + z),
-            tri_center(x, -1 + y, z),
+            tri_center(-1 + a, b, c),
+            tri_center(a, b, -1 + c),
+            tri_center(a, -1 + b, c),
         ]
 
 def pick_tri(x, y):
@@ -68,77 +68,77 @@ def pick_tri(x, y):
         ceil((-1 * x - sqrt3 / 3 * y) / edge_length),
     )
 
-def tri_neighbours(x, y, z):
+def tri_neighbours(a, b, c):
     """Returns the tris that share an edge with the given tri"""
-    if points_up(x, y, z):
+    if points_up(a, b, c):
         return [
-            (x - 1, y    , z    ),
-            (x    , y - 1, z    ),
-            (x    , y    , z - 1),
+            (a - 1, b    , c    ),
+            (a    , b - 1, c    ),
+            (a    , b    , c - 1),
         ]
     else:
         return [
-            (x + 1, y    , z    ),
-            (x    , y + 1, z    ),
-            (x    , y    , z + 1),
+            (a + 1, b    , c    ),
+            (a    , b + 1, c    ),
+            (a    , b    , c + 1),
         ]
 
-def tri_dist(x1, y1, z1, x2, y2, z2):
+def tri_dist(a1, b1, c1, a2, b2, c2):
     """Returns how many steps one tri is from another"""
-    return abs(x1 - x2) + abs(y1 - y2) + abs(z1 - z2)
+    return abs(a1 - a2) + abs(b1 - b2) + abs(c1 - c2)
 
-def tri_disc(x, y, z, r):
+def tri_disc(a, b, c, r):
     """Returns the tris that are at most distance r from the given tri"""
     # This could probably be optimized more
-    for dx in range(-r, r + 1):
-        for dy in range(-r, r + 1):
-            dz = 1 - (x + y + z + dx + dy)
-            if abs(dx) + abs(dy) + abs(dz) <= r:
-                yield (x + dx, y + dy, z + dz)
-            dz += 1
-            if abs(dx) + abs(dy) + abs(dz) <= r:
-                yield (x + dx, y + dy, z + dz)
+    for da in range(-r, r + 1):
+        for db in range(-r, r + 1):
+            dc = 1 - (a + b + c + da + db)
+            if abs(da) + abs(db) + abs(dc) <= r:
+                yield (a + da, b + db, c + dc)
+            dc += 1
+            if abs(da) + abs(db) + abs(dc) <= r:
+                yield (a + da, b + db, c + dc)
 
 # Symmetry #####################################################################
 
-def tri_rotate_60(x, y, z, n = 1):
+def tri_rotate_60(a, b, c, n = 1):
     """Rotates the given triangle n * 60 degrees counter clockwise around the origin,
     and returns the co-ordinates of the new triangle."""
     n = n % 6 if n >= 0 else n % 6 + 6
     if n == 0:
-        return (x, y, z)
+        return (a, b, c)
     if n == 1:
-        return (1 - y, 1 - z, 1 - x)
+        return (1 - b, 1 - c, 1 - a)
     if n == 2:
-        return (z, x, y)
+        return (c, a, b)
     if n == 3:
-        return (1 - x, 1 - y, 1 - z)
+        return (1 - a, 1 - b, 1 - c)
     if n == 4:
-        return (y, z, x)
+        return (b, c, a)
     if n == 5:
-        return (1 - z, 1 - x, 1 - y)
+        return (1 - c, 1 - a, 1 - b)
 
-def tri_rotate_about_60(x, y, z, about_x, about_y, about_z, n = 1):
+def tri_rotate_about_60(a, b, c, about_a, about_b, about_c, n = 1):
     """Rotates the given triangle n* 60 degress counter clockwise about the given tri
     and return the co-ordinates of the new triangle."""
-    (a, b, c) = tri_rotate_60(x - about_x, y - about_y, z - about_z)
-    return (a + about_x, y + about_y, z + about_z)
+    (a, b, c) = tri_rotate_60(a - about_a, b - about_b, c - about_c)
+    return (a + about_a, b + about_b, c + about_c)
 
-def tri_reflect_y(x, y, z):
+def tri_reflect_y(a, b, c):
     """Reflects the given triangle through the x-axis
     and returns the co-ordinates of the new triangle"""
-    return (1 - z, 1 - y, 1 - x)
+    return (1 - c, 1 - b, 1 - a)
 
-def tri_reflect_x(x, y, z):
+def tri_reflect_x(a, b, c):
     """Reflects the given triangle through the y-axis
     and returns the co-ordinates of the new triangle"""
-    return (z, y, x)
+    return (c, b, a)
 
-def tri_reflect_by(x, y, z, n = 0):
+def tri_reflect_by(a, b, c, n = 0):
     """Reflects the given triangle through the x-axis rotated counter clockwise by n * 30 degrees
     and returns the co-ordinates of the new triangle"""
-    (a, b, c) = tri_reflect_y(x, y, z)
-    return tri_rotate_60(a, b, c, n)
+    (a2, b2, c2) = tri_reflect_y(a, b, c)
+    return tri_rotate_60(a2, b2, c2, n)
 
 # Shapes #######################################################################
 
@@ -190,10 +190,10 @@ def tri_line_intersect(x1, y1, x2, y2):
         yield (a, b, c)
         isup = not isup
 
-def tri_line(x1, y1, z1, x2, y2, z2):
+def tri_line(a1, b1, c1, a2, b2, c2):
     """Returns the tris in a shortest path from one tri to another, staying as close to the straight line as possible"""
-    (x1, y1) = tri_center(x1, y1, z1)
-    (x2, y2) = tri_center(x2, y2, z2)
+    (x1, y1) = tri_center(a1, b1, c1)
+    (x2, y2) = tri_center(a2, b2, c2)
     return tri_line_intersect(x1, y1, x2, y2)
 
 def tri_rect_intersect(x, y, width, height):
