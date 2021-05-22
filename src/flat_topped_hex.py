@@ -23,6 +23,7 @@
 from __future__ import division
 from math import floor, ceil, sqrt
 from settings import edge_length
+from common import mod
 from updown_tri import pick_tri, tri_line_intersect, tri_rect_intersect
 
 sqrt3 = sqrt(3)
@@ -102,7 +103,7 @@ def hex_dist(x1, y1, z1, x2, y2, z2):
 def hex_rotate_60(x, y, z, n = 1):
     """Rotates the given hex n * 60 degrees counter clockwise around the origin,
     and returns the co-ordinates of the new hex."""
-    n = n % 6 if n >= 0 else n % 6 + 6
+    n = mod(n, 6)
     if n == 0:
         return (x, y, z)
     if n == 1:

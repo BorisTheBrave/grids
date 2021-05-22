@@ -20,6 +20,7 @@
 
 from math import floor, ceil, sqrt
 from settings import edge_length
+from common import mod
 
 sqrt3 = sqrt(3)
 
@@ -104,7 +105,7 @@ def tri_disc(a, b, c, r):
 def tri_rotate_60(a, b, c, n = 1):
     """Rotates the given triangle n * 60 degrees counter clockwise around the origin,
     and returns the co-ordinates of the new triangle."""
-    n = n % 6 if n >= 0 else n % 6 + 6
+    n = mod(n, 6)
     if n == 0:
         return (a, b, c)
     if n == 1:

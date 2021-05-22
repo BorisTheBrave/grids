@@ -25,7 +25,7 @@ def square_center(x, y):
     return (x * edge_length, y * edge_length)
 
 def square_corners(x, y):
-    """Returns the four corners ofa  given square in cartesian co-ordinates"""
+    """Returns the four corners of a given square in cartesian co-ordinates"""
     return [
         square_center(x - 0.5, y - 0.5),
         square_center(x + 0.5, y - 0.5),
