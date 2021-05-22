@@ -16,6 +16,7 @@
 from __future__ import division
 from math import floor, ceil, sqrt
 from settings import edge_length
+from common import mod
 
 # Basics #######################################################################
 
@@ -56,9 +57,9 @@ def square_dist(x1, y1, x2, y2):
 # Symmetry #####################################################################
 
 def square_rotate_90(x, y, n = 1):
-    """Rotates the given square n * 60 degrees counter clockwise around the (0, 0) square,
+    """Rotates the given square n * 90 degrees counter clockwise around the (0, 0) square,
     and returns the co-ordinates of the new square."""
-    n = n % 4 if n >= 0 else n % 6 + 6
+    n = mod(n, 4)
     if n == 0:
         return (x, y)
     if n == 1:
@@ -69,7 +70,7 @@ def square_rotate_90(x, y, n = 1):
         return (y, -x)
 
 def square_rotate_about_90(x, y, about_x, about_y, n = 1):
-    """Rotates the given square n * 60 degress counter clockwise about the given square
+    """Rotates the given square n * 90 degress counter clockwise about the given square
     and return the co-ordinates of the new square."""
     x1, y2 = square_rotate_90(x - about_x, y - about_y)
     return (x2 + about_x, y2 + about_y)
