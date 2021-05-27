@@ -2,13 +2,15 @@
 # There's no interesting code here
 
 from flat_topped_hex import *
+from flat_topped_trihex import *
 from updown_tri import *
 from square import *
 import flat_topped_hex
 import updown_tri
 
 poly_style="fill: rgb(244, 244, 241); stroke: rgb(51, 51, 51); stroke-width: 0.1"
-text_style = "fill: rgb(51, 51, 51); font-size: 0.3px"
+stroke_text_style = "fill: rgb(51, 51, 51); font-size: 0.3px;stroke: white; stroke-width: 0.05"
+text_style = "fill: rgb(51, 51, 51); font-size: 0.3px;"
 xs = """style="fill: hsl( 90, 100%, 35%); font-weight: bold" """
 ys = """style="fill: hsl(300, 80%, 50%); font-weight: bold" """
 zs = """style="fill: hsl(200, 100%, 45%); font-weight: bold" """
@@ -21,12 +23,20 @@ def poly(corners):
     points = " ".join(map(lambda p: ",".join(map(str,flip(p))), corners))
     return f"""<polygon points="{points}" style="{poly_style}" />\n"""
 
-def cell_text(p, x, y, z=None):
-    text = f"""<text x="{p[0]}" y="{p[1] + 0.08}" text-anchor="middle" alignment-baseline="middle" style="{text_style}">"""
+def cell_text(p, x, y, z=None, scale=1):
+    text = ""
+    text += f"""<g transform="translate({p[0]},{p[1] + 0.08}) scale({scale})">"""
+    text += f"""<text text-anchor="middle" alignment-baseline="middle" style="{stroke_text_style}">"""
     text += f"""<tspan {xs}>{x}</tspan>, <tspan {ys}>{y}</tspan>"""
     if z is not None:
         text += f""", <tspan {zs}>{z}</tspan>"""
     text += f"""</text>\n"""
+    text += f"""<text text-anchor="middle" alignment-baseline="middle" style="{text_style}">"""
+    text += f"""<tspan {xs}>{x}</tspan>, <tspan {ys}>{y}</tspan>"""
+    if z is not None:
+        text += f""", <tspan {zs}>{z}</tspan>"""
+    text += f"""</text>\n"""
+    text += "</g>"
     return text
 
 def hex_grid_svg():
@@ -110,8 +120,24 @@ def square_grid_svg():
     with open("svg/square_grid.svg", "w") as f:
         f.write(svg)
 
+def trihex_grid_svg():
+    svg = ""
+    svg += """<svg viewBox="-3 -3 6 6" width="300px" height="300px" xmlns="http://www.w3.org/2000/svg">\n"""
+    for a, b, c in trihex_disc(0, 0, 0, 6):
+        center = flip(trihex_center(a, b, c))
+        svg += poly(trihex_corners(a, b, c))
+    for a, b, c in trihex_disc(0, 0, 0, 6):
+        center = flip(trihex_center(a, b, c))
+        is_hex = trihex_cell_type(a, b, c) == "hex"
+        svg += cell_text(center, a, b, c, 1 if is_hex else 0.8)
+    svg += "</svg>"
+
+    with open("svg/trihex_grid.svg", "w") as f:
+        f.write(svg)
+
 hex_grid_svg()
 hex_neighbours_svg()
 tri_grid_svg()
 tri_neighbours_svg()
 square_grid_svg()
+trihex_grid_svg()

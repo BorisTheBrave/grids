@@ -11,7 +11,6 @@ There's many different co-ordinate systems for working with grids - this guide o
 
 [![](img/square.png)](src/square.py)
 
-
 ### [flat_topped_hex.py](src/flat_topped_hex.py)
 
 [![](img/flat_topped_hex.png)](src/flat_topped_hex.py)
@@ -19,6 +18,10 @@ There's many different co-ordinate systems for working with grids - this guide o
 ### [updown_tri.py](src/updown_tri.py)
 
 [![](img/updown_tri.png)](src/updown_tri.py)
+
+### [flat_topped_trihex.py](src/flat_topped_trihex.py)
+
+[![](img/flat_topped_trihex.png)](src/flat_topped_trihex.py)
 
 ## Usage
 

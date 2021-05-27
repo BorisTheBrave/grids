@@ -151,7 +151,7 @@ def square_rect(rect_x, rect_y, width, height):
             yield (rect_x + x, rect_y + y)
 
 def square_rect_knoll(x, y, rect_x, rect_y, width, height):
-    """Given a square and a rectangle, gives a pair of co-ordinates that identify the square in the rectangle"""
+    """Given a square and a rectangle, gives a pair of integer cartesian co-ordinates that identify the square in the rectangle"""
     return (x - rect_x, y - rect_y)
 
 def square_rect_unknoll(dx, dy, rect_x, rect_y, width, height):
