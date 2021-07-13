@@ -2,6 +2,7 @@ from flat_topped_hex import *
 from updown_tri import tri_center
 import unittest
 
+
 class TestFlatToppedHex(unittest.TestCase):
 
     def test_rect1(self):
@@ -60,12 +61,11 @@ class TestFlatToppedHex(unittest.TestCase):
             (4, -3, -1)
         ])
 
-
     def test_hex_line(self):
         self.assertListEqual(list(hex_line(0, 0, 0, 4, -3, -1)), [
             (0, 0, 0),
             (1, -1, 0),
-            (2, -1, -1), # (2, -2, 0) would be an equally valid choice
+            (2, -1, -1),  # (2, -2, 0) would be an equally valid choice
             (3, -2, -1),
             (4, -3, -1)
         ])
@@ -104,7 +104,6 @@ class TestFlatToppedHex(unittest.TestCase):
         test_parent(3, -5, 2, 0, -1, 1)
         test_parent(-2, -3, 5, -1, 0, 1)
         test_parent(10, -4, -6, 2, -2, 0)
-
 
 
 if __name__ == '__main__':
