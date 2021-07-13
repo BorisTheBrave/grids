@@ -26,9 +26,9 @@
 
 from __future__ import division
 from math import floor, ceil, sqrt
-from settings import edge_length
-from common import mod
-from updown_tri import pick_tri, tri_line_intersect, tri_rect_intersect
+
+
+from .updown_tri import pick_tri, tri_line_intersect, tri_rect_intersect
 
 sqrt3 = sqrt(3)
 
@@ -44,7 +44,7 @@ def trihex_cell_type(a, b, c):
     if n == -1:
         return "tri_down"
 
-def trihex_center(a, b, c):
+def trihex_center(a, b, c, edge_length=1.0):
     """Returns the center of a given trihex in cartesian co-ordinates"""
     return ((             a +                                -c) * edge_length,
             (-sqrt3 / 3 * a + sqrt3 * 2 / 3 * b - sqrt3 / 3 * c) * edge_length)

@@ -19,14 +19,13 @@
 # To find the neighbours of a down triangle, add 1 to a co-ordinate, and subtract one for neighbours of an up triangle.
 
 from math import floor, ceil, sqrt
-from settings import edge_length
-from common import mod
+
 
 sqrt3 = sqrt(3)
 
 # Basics #######################################################################
 
-def tri_center(a, b, c):
+def tri_center(a, b, c, edge_length=1.0):
     """Returns the center of a given triangle in cartesian co-ordinates"""
     # Each unit of a, b, c moves you in the direction of one of the edges of a
     # down triangle, in linear combination.
@@ -57,7 +56,7 @@ def tri_corners(a, b, c):
             tri_center(a, -1 + b, c),
         ]
 
-def pick_tri(x, y):
+def pick_tri(x, y, edge_length=1.0):
     """Returns the triangle that contains a given cartesian co-ordinate point"""
     # Using dot product, measures which row and diagonals a given point occupies.
     # Or equivalently, multiply by the inverse matrix to tri_center
@@ -105,7 +104,7 @@ def tri_disc(a, b, c, r):
 def tri_rotate_60(a, b, c, n = 1):
     """Rotates the given triangle n * 60 degrees counter clockwise around the origin,
     and returns the co-ordinates of the new triangle."""
-    n = mod(n, 6)
+    n = n% 6
     if n == 0:
         return (a, b, c)
     if n == 1:
@@ -143,7 +142,7 @@ def tri_reflect_by(a, b, c, n = 0):
 
 # Shapes #######################################################################
 
-def tri_line_intersect(x1, y1, x2, y2):
+def tri_line_intersect(x1, y1, x2, y2, edge_length=1.0):
     """Returns the triangles that intersect the line specified in cartesian co-ordinates"""
     x1 /= edge_length
     y1 /= edge_length
@@ -197,7 +196,7 @@ def tri_line(a1, b1, c1, a2, b2, c2):
     (x2, y2) = tri_center(a2, b2, c2)
     return tri_line_intersect(x1, y1, x2, y2)
 
-def tri_rect_intersect(x, y, width, height):
+def tri_rect_intersect(x, y, width, height, edge_length=1.0):
     """Returns the tris that intersect the rectangle specified in cartesian co-ordinates"""
     assert width >= 0, "Rectangle should have non-negative width"
     assert height >= 0, "Rectangle should have non-negative height"
