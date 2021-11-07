@@ -148,7 +148,7 @@ def square_rect(rect_x, rect_y, width, height):
     that extends `height` squares upwards, and `width` squares to the right."""
     for dx in range(width):
         for dy in range(height):
-            yield (rect_x + x, rect_y + y)
+            yield (rect_x + dx, rect_y + dy)
 
 def square_rect_knoll(x, y, rect_x, rect_y, width, height):
     """Given a square and a rectangle, gives a pair of integer cartesian co-ordinates that identify the square in the rectangle"""
@@ -156,7 +156,7 @@ def square_rect_knoll(x, y, rect_x, rect_y, width, height):
 
 def square_rect_unknoll(dx, dy, rect_x, rect_y, width, height):
     """Given a co-ordinate pair and a rectangle, reverses square_rect_knoll"""
-    return (x + rect_x, y + rect_y)
+    return (dx + rect_x, dy + rect_y)
 
 def square_rect_index(x, y, rect_x, rect_y, width, height):
     """Given a square and a rectangle, gives a linear position of the square.

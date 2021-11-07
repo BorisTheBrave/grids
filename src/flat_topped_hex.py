@@ -120,8 +120,8 @@ def hex_rotate_60(x, y, z, n = 1):
 def hex_rotate_about_60(x, y, z, about_x, about_y, about_z, n = 1):
     """Rotates the given hex n* 60 degress counter clockwise about the given hex
     and return the co-ordinates of the new hex."""
-    (a, b, c) = tri_rotate_60(x - about_x, y - about_y, z - about_z)
-    return (a + about_x, y + about_y, z + about_z)
+    (a, b, c) = hex_rotate_60(x - about_x, y - about_y, z - about_z, n)
+    return (a + about_x, b + about_y, c + about_z)
 
 def hex_reflect_y(x, y, z):
     """Reflects the given hex through the x-axis
