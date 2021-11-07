@@ -23,7 +23,7 @@ from common import mod
 
 def square_center(x, y):
     """Returns the center of a given square in cartesian co-ordinates"""
-    return (x * edge_length, y * edge_length)
+    return ((x + 0.5) * edge_length, (y + 0.5) * edge_length)
 
 def square_corners(x, y):
     """Returns the four corners of a given square in cartesian co-ordinates"""
@@ -72,7 +72,7 @@ def square_rotate_90(x, y, n = 1):
 def square_rotate_about_90(x, y, about_x, about_y, n = 1):
     """Rotates the given square n * 90 degress counter clockwise about the given square
     and return the co-ordinates of the new square."""
-    x1, y2 = square_rotate_90(x - about_x, y - about_y)
+    x2, y2 = square_rotate_90(x - about_x, y - about_y)
     return (x2 + about_x, y2 + about_y)
 
 def square_reflect_y(x, y):
@@ -111,10 +111,10 @@ def square_line_intersect(x1, y1, x2, y2):
     y = floor(x2)
     stepx = 1 if dx > 0 else -1
     stepy = 1 if dy > 0 else -1
-    tx = (x - int(dx <= 0) - x1) / dx
-    ty = (y - int(dy <= 0) - y2) / dy
-    idx = abs(1 / dx)
-    idy = abs(1 / dy)
+    tx = (x + int(dx >= 0) - x1) / dx if dx != 0 else float('inf')
+    ty = (y + int(dy >= 0) - y1) / dy if dy != 0 else float('inf')
+    idx = abs(1 / dx) if dx != 0 else float('inf')
+    idy = abs(1 / dy) if dy != 0 else float('inf')
     yield (x, y)
     while True:
         if tx <= ty:
@@ -125,7 +125,7 @@ def square_line_intersect(x1, y1, x2, y2):
             if ty > 1: return
             y += stepy
             ty += idy
-        yield (tx, ty)
+        yield (x, y)
 
 def square_line(x1, y1, x2, y2):
     """Returns the squares in a shortest path from one square to another, staying as close to the straight line as possible"""

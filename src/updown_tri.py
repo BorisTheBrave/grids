@@ -168,12 +168,12 @@ def tri_line_intersect(x1, y1, x2, y2):
     stepa = 1 if da > 0 else -1
     stepb = 1 if db > 0 else -1
     stepc = 1 if dc > 0 else -1
-    ta = (a - int(da <= 0) - fa) / da
-    tb = (b - int(db <= 0) - fb) / db
-    tc = (c - int(dc <= 0) - fc) / dc
-    ida = abs(1 / da)
-    idb = abs(1 / db)
-    idc = abs(1 / dc)
+    ta = (a - int(da <= 0) - fa) / da if da != 0 else float('inf')
+    tb = (b - int(db <= 0) - fb) / db if db != 0 else float('inf')
+    tc = (c - int(dc <= 0) - fc) / dc if dc != 0 else float('inf')
+    ida = abs(1 / da) if da != 0 else float('inf')
+    idb = abs(1 / db) if db != 0 else float('inf')
+    idc = abs(1 / dc) if dc != 0 else float('inf')
     yield (a, b, c)
     while True:
         if ta <= tb and ta <= tc and (stepa == 1) != isup:
