@@ -176,16 +176,25 @@ def tri_line_intersect(x1, y1, x2, y2):
     idc = abs(1 / dc) if dc != 0 else float('inf')
     yield (a, b, c)
     while True:
-        if ta <= tb and ta <= tc and (stepa == 1) != isup:
-            if ta > 1: return
+        # Find the next line crossed. We filter out lines that 
+        # aren't bordering the current triangle, do deal with precision issues
+        ta2 = ta if (stepa == 1) != isup else float('inf')
+        tb2 = tb if (stepb == 1) != isup else float('inf')
+        tc2 = tc if (stepc == 1) != isup else float('inf')
+
+        if ta2 <= tb2 and ta2 <= tc2:
+            if ta > 1:
+                return
             a += stepa
             ta += ida
-        elif tb <= ta and tb <= tc and (stepb == 1) != isup:
-            if tb > 1: return
+        elif tb2 <= ta2 and tb2 <= tc2:
+            if tb > 1:
+                return
             b += stepb
             tb += idb
         else:
-            if tc > 1: return
+            if tc > 1:
+                return
             c += stepc
             tc += idc
         yield (a, b, c)
